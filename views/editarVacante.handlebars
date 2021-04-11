@@ -25,11 +25,13 @@
         <div class="campo">
             <label>Contrato</label>
             <select name="contrato">
-                <option value="" disabled selected >-- Selecciona --</option>
-                <option value="Freelance">Freelance</option>
-                <option value="Tiempo Completo">Tiempo Completo</option>
-                <option value="Medio Tiempo">Medio Tiempo</option>
-                <option value="Por Proyecto">Por Proyecto</option>
+                {{#tipoContrato vacante.contrato}}
+                    <option value="" disabled selected >-- Selecciona --</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Tiempo Completo">Tiempo Completo</option>
+                    <option value="Medio Tiempo">Medio Tiempo</option>
+                    <option value="Por Proyecto">Por Proyecto</option>
+                {{/tipoContrato}}
             </select>
         </div>
 
@@ -49,7 +51,7 @@
 
         <div class="campo centrar-horizontal">
             <input type="hidden" name="skills" id="skills">
-            <input type="submit" value="Publicar" class="btn btn-azul">
+            <input type="submit" value="Guardar Cambios" class="btn btn-azul">
         </div>
 
     </form>
