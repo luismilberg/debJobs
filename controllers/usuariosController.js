@@ -11,11 +11,15 @@ exports.formCrearCuenta = (req,res) => {
 exports.crearUsuario = async (req, res, next) => {
     //crear el usuario
     const usuario = new Usuario(req.body);
-    
-    const nuevoUsuario = usuario.save();
-    if(!nuevoUsuario) return next();
 
-    res.redirect('/iniciar-sesion');
+    try {
+        await usuario.save();
+        res.redirect('/iniciar-sesion');
+    } catch (error) {
+        req.flash('error', error);
+        res.redirect('/crear-cuenta');
+    }
+
 
 }
 
@@ -36,10 +40,16 @@ exports.validarRegistro = (req, res, next) => {
 
 
     const errores = req.validationErrors();
-    
+
     if(errores){
         //si hay errores
-        
+        req.flash('error', errores.map(error => error.msg));
+        res.render('crearCuenta', {
+            nombrePagina: 'Crea tu cuenta en DevJobs',
+            tagline: 'Comienza a publicar tus vacantes gratos, sólo debes crear una cuenta',
+            mensajes: req.flash()
+        });
+        return;
     }
     //si toda la validación es correcta
     next();
