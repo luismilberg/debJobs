@@ -54,3 +54,11 @@ exports.validarRegistro = (req, res, next) => {
     //si toda la validación es correcta
     next();
 }
+
+
+//formulario para iniciar sesión
+exports.formIniciarSesion = (req,res) => {
+    res.render('iniciarSesion', {
+        nombrePagina: 'Iniciar Sesión DevJobs'
+    });
+}
