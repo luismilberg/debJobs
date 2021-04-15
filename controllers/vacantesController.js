@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Vacante = mongoose.model('Vacante');
 
+
 exports.formularioNuevaVacante = (req,res) => {
     res.render('nueva-vacante', {
         nombrePagina: 'Nueva Vacante',
@@ -12,6 +13,9 @@ exports.formularioNuevaVacante = (req,res) => {
 
 exports.agregarVacante = async (req,res) => {
     const vacante = new Vacante (req.body);
+
+    //usuario creador de la vacante
+    vacante.autor = req.user._id;
 
     //crear el arreglo de skills
 
