@@ -29,7 +29,8 @@ app.use(expressValidator());
 app.engine('handlebars', 
     exphbs({
         defaultLayout: 'layout',
-        helpers: require('./helpers/handlebars')
+        helpers: require('./helpers/handlebars'),
+        allowProtoMethodsByDefault: true
     })
 );
 

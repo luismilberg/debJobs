@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Usuario = mongoose.model('Usuarios');
+const Usuarios = mongoose.model('Usuarios');
 
 exports.formCrearCuenta = (req,res) => {
     res.render('crearCuenta', {
@@ -10,7 +10,7 @@ exports.formCrearCuenta = (req,res) => {
 
 exports.crearUsuario = async (req, res, next) => {
     //crear el usuario
-    const usuario = new Usuario(req.body);
+    const usuario = new Usuarios(req.body);
 
     try {
         await usuario.save();
@@ -61,4 +61,63 @@ exports.formIniciarSesion = (req,res) => {
     res.render('iniciarSesion', {
         nombrePagina: 'Iniciar Sesión DevJobs'
     });
+}
+
+//editar el perfil del usuario
+exports.formEditarPerfil = (req, res) => {
+    const usuario = req.user.toObject();
+    res.render('editarPerfil',{
+        nombrePagina: 'Edita tu perfil en devJobs',
+        usuario,
+        nombre: usuario.nombre,
+        cerrarSesion: true
+    })
+}
+
+//guardar cambios al editar perfil
+exports.editarPerfil = async (req, res) => {
+    const usuario = await Usuarios.findById(req.user._id);
+    
+    usuario.nombre = req.body.nombre;
+    usuario.email = req.body.email;
+    if(req.body.password){
+        usuario.password = req.body.password
+    }
+
+    await usuario.save();
+
+    req.flash('correcto', 'Cambios modificados correctamente');
+
+    //redirect
+    res.redirect('/administracion');
+}
+
+exports.validarUsuario = (req, res, next) => {
+    //Sanitizar los campos
+    req.sanitizeBody('nombre').escape();
+    req.sanitizeBody('email').escape();
+    if(req.body.password) {
+        req.sanitizeBody('password').escape();
+    }
+
+    //validar los campos
+    req.checkBody('nombre', 'El nombre no puede estar vacío').notEmpty();
+    req.checkBody('email', 'El email no puede estar vacío').notEmpty();
+
+    const errores = req.validationErrors();
+
+    if(errores){
+        const usuario = req.user.toObject();
+        req.flash('error', errores.map(error => error.msg));
+        res.render('editarPerfil',{
+            nombrePagina: 'Edita tu perfil en devJobs',
+            usuario,
+            nombre: usuario.nombre,
+            cerrarSesion: true,
+            mensajes: req.flash()
+        })
+    }
+
+    next();
+    
 }
