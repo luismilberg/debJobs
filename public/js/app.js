@@ -106,6 +106,13 @@ const accionesListado = (e) => {
                     });
             }
           })
+          .catch((e) => {
+              Swal.fire({
+                  type: 'error', 
+                  title: 'Hubo un error', 
+                  text: 'No se pudo eliminar'
+              });
+          });
 
     } else {
         window.location.href = e.target.href
