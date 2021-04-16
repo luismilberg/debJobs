@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.3",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "concurrently": "^6.0.1",
     "connect-flash": "^0.1.1",
@@ -26,7 +27,8 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "shortid": "^2.2.16",
-    "slug": "^4.0.3"
+    "slug": "^4.0.3",
+    "sweetalert2": "^10.16.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

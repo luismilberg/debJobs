@@ -1,3 +1,6 @@
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
 document.addEventListener('DOMContentLoaded', () => {
     const skills = document.querySelector('.lista-conocimientos');
     if(skills){
@@ -6,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
         //una vez que estamos en editar llamar a la funcion
 
         skillsSeleccionados();
+    }
+
+    const vacantesListado = document.querySelector('.panel-administracion');
+    if(vacantesListado){
+        vacantesListado.addEventListener('click', accionesListado);
     }
 });
 
@@ -58,4 +66,48 @@ const skillsSeleccionados = () => {
 
     const skillsArray = [...skills];
     document.querySelector('#skills').value = skillsArray;
+}
+
+// Eliminar vacnates
+
+const accionesListado = (e) => {
+    e.preventDefault();
+
+    if(e.target.dataset.eliminar){
+        // eliminar por medio de axios
+
+        Swal.fire({
+            title: '¿Confirmar Eliminación?',
+            text: "¡Una vez eliminada no se puede recuperar!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '¡Si, eliminar!',
+            cancelButtonText: 'No, cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+                // enviar la petición con axios
+                const url = `${location.origin}/vacantes/eliminar/${e.target.dataset.eliminar}`;
+
+                //axios para eliminar el registro
+                axios.delete(url, {params: {url}})
+                    .then(function(resp) {
+                        if(resp.status === 200){
+                            Swal.fire(
+                                'Eliminado',
+                                resp.data,
+                                'success'
+                            )
+                            // to do : eliminar del DOM
+                            e.target.parentElement.parentElement.parentElement.removeChild(e.target.parentElement.parentElement);
+                        }
+                    });
+            }
+          })
+
+    } else {
+        window.location.href = e.target.href
+    }
 }

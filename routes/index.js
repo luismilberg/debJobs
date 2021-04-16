@@ -26,12 +26,17 @@ module.exports = () => {
     //Editar vacante
     router.get('/vacantes/editar/:url', 
         authController.verificarUsuario,
-        vacantesController.validarVacante,
         vacantesController.formEditarVacante);
-
-    router.post('/vacantes/editar/:url', 
+        
+        router.post('/vacantes/editar/:url', 
         authController.verificarUsuario,
+        vacantesController.validarVacante,
         vacantesController.editarVacante);
+
+    // Eliminar vacantes
+    router.delete('/vacantes/eliminar/:id',
+        vacantesController.eliminarVacante
+    );
 
     // Crear cuentas
     router.get('/crear-cuenta', usuariosController.formCrearCuenta);
