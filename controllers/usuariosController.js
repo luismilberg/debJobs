@@ -1,5 +1,43 @@
 const mongoose = require('mongoose');
+const multer = require('multer');
 const Usuarios = mongoose.model('Usuarios');
+const shortid = require('shortid');
+
+
+//Opciones de Multer
+const configuracionMulter = {
+    storage: fileStorage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, __dirname+'../../public/uploads/perfiles');
+        },
+        filename: (req, file, cb) => {
+            const extension = file.mimetype.split('/')[1];
+            cb(null, `${shortid.generate()}.${extension}`);
+        }
+    }),
+    fileFilter(req, file, cb){
+        if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+            cb(null, true);
+        } else {
+            cb(null, false);
+        }
+    }, 
+    limits: {fileSize : 100000}
+}
+
+const upload = multer(configuracionMulter).single('imagen');
+
+
+exports.subirImagen = (req,res, next) => {
+    upload(req, res, function(error){
+        if(error instanceof multer.MulterError){
+            return next();
+        } 
+    });
+    next();
+}
+
+
 
 exports.formCrearCuenta = (req,res) => {
     res.render('crearCuenta', {
@@ -82,6 +120,10 @@ exports.editarPerfil = async (req, res) => {
     usuario.email = req.body.email;
     if(req.body.password){
         usuario.password = req.body.password
+    }
+
+    if(req.fil){
+        usuario.imagen = req.file.filename;
     }
 
     await usuario.save();
