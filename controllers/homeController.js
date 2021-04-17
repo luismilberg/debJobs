@@ -11,6 +11,7 @@ exports.mostrarTrabajos = async (req, res, next) => {
         tagLine: 'Encuentra y publica trabajos para desarrolladores webs',
         barra: true,
         boton: true,
-        vacantes
+        vacantes,
+        cerrarSesion: true
     });
 }

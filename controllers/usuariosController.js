@@ -122,7 +122,7 @@ exports.editarPerfil = async (req, res) => {
         usuario.password = req.body.password
     }
 
-    if(req.fil){
+    if(req.file){
         usuario.imagen = req.file.filename;
     }
 
