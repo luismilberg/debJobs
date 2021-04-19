@@ -70,5 +70,12 @@ module.exports = () => {
         usuariosController.subirImagen,
         usuariosController.editarPerfil);
 
+    // Recibir mensajes de candidatos
+
+    router.post('/vacantes/:url',
+        vacantesController.subirCV, //validar y subir el archivo
+        vacantesController.contactar //guardar en la BD
+    );
+
     return router;
 }

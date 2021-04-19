@@ -32,7 +32,11 @@ exports.subirImagen = (req,res, next) => {
     upload(req, res, function(error){
         if(error){
             if(error instanceof multer.MulterError){
-                return next();
+                if(error.code === 'LIMIT_FILE_SIZE'){
+                    req.flash('error', 'El archivo es demasiado grande, máximo 100kb');
+                } else {
+                    req.flash('error', error.message);
+                }
             } else {
                 req.flash('error', error.message);
             }
@@ -117,7 +121,8 @@ exports.formEditarPerfil = (req, res) => {
         nombrePagina: 'Edita tu perfil en devJobs',
         usuario,
         nombre: usuario.nombre,
-        cerrarSesion: true
+        cerrarSesion: true,
+        imagen: req.user.imagen
     })
 }
 
@@ -165,7 +170,8 @@ exports.validarUsuario = (req, res, next) => {
             usuario,
             nombre: usuario.nombre,
             cerrarSesion: true,
-            mensajes: req.flash()
+            mensajes: req.flash(),
+            imagen: req.user.imagen
         })
     }
 
