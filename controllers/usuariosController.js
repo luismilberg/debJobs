@@ -123,7 +123,7 @@ exports.formEditarPerfil = (req, res) => {
         nombre: usuario.nombre,
         cerrarSesion: true,
         imagen: req.user.imagen
-    })
+    });
 }
 
 //guardar cambios al editar perfil

@@ -54,6 +54,23 @@ module.exports = () => {
         authController.verificarUsuario,
         authController.cerrarSesion);
 
+    // Recuperar Contraseña
+    router.get('/restablecer-password',
+        authController.formRestablecerPassword
+    );
+
+    router.post('/restablecer-password',
+        authController.enviarToken
+    );
+
+    // Recuperar Contraseña almacenar en BD
+    router.get('/restablecer-password/:token', 
+        authController.restablecerPassword
+    );
+    router.post('/restablecer-password/:token', 
+        authController.guardarPassword
+    );
+
     // Panel de administración
     router.get('/administracion', 
         authController.verificarUsuario,
@@ -75,6 +92,12 @@ module.exports = () => {
     router.post('/vacantes/:url',
         vacantesController.subirCV, //validar y subir el archivo
         vacantesController.contactar //guardar en la BD
+    );
+
+    //Muestra los Candidatos
+    router.get('/candidatos/:id',
+        authController.verificarUsuario,
+        vacantesController.mostrarCandidatos
     );
 
     return router;
